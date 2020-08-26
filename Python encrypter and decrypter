@@ -1,0 +1,51 @@
+import cryptography
+import os.path
+from cryptography.fernet import Fernet
+def check_file(subject_file):
+  file_exists = os.path.isfile(subject_file)
+  return file_exists
+def encrypt_this(input_text, key_file, destination_file):
+  message = input_text.encode()
+  check_file(key_file)
+  if check_file:
+    with open(key_file, 'rb') as file:   
+      key = file.read()
+      file.close()
+  else:
+    key = Fernet.generate_key()
+    file = open(key_file, 'w')
+    file.close
+    with open(key_file, 'wb') as file:
+      file.write(key)
+      file.close()
+  f = Fernet(key)
+  encrypted_data = f.encrypt(message)
+  check_file(destination_file)
+  if check_file:
+    with open(destination_file, 'wb') as file:
+      file.write(encrypted_data)
+      file.close
+  else:
+    with open(destination_file, 'w') as file:
+      file.close
+    with open(destination_file, 'wb') as file:
+      file.write(encrypted_data)
+      file.close
+def decrypt_this(encrypted_data_file, key_file):
+  check_file(encrypted_data_file)
+  if check_file:
+    with open(encrypted_data_file, 'rb') as file:
+      message = file.read()
+      file.close
+    check_file(key_file)
+    if check_file:
+      with open(key_file, 'rb') as file:   
+        key = file.read()
+        file.close()
+    else:
+      print("Error, invalid key file")
+  else:
+   print("Error, invalid encrypted data file")
+  f = Fernet(key)
+  decrypted_data = f.decrypt(message)
+  return decrypted_data
